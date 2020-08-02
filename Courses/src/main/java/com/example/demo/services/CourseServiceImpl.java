@@ -3,13 +3,18 @@ package com.example.demo.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.dao.CourseDao;
 import com.example.demo.entities.Course;
 
 @Service
 public class CourseServiceImpl implements CoursesService {
 
+	@Autowired
+	private CourseDao courseDao;
+	
 	List<Course> list;
 	public CourseServiceImpl() {
 		
@@ -21,29 +26,25 @@ public class CourseServiceImpl implements CoursesService {
 	
 	@Override
 	public List<Course> getCourses() {
-		// TODO Auto-generated method stub
-		return list;
+		
+		return courseDao.findAll();
 	}
 
 
 	@Override
 	public Course getCourse(long courseId) {
-		Course c = null;
-		
-		for(Course course:list) {
-			if(course.getId()==courseId) {
-				c=course;
-				break;
-			}
-		}
-		return c;
+		/*
+		 * Course c = null;
+		 * 
+		 * for(Course course:list) { if(course.getId()==courseId) { c=course; break; } }
+		 */
+		return courseDao.getOne(courseId);
 	}
 
 
 	@Override
 	public Course addCourse(Course course) {
-		list.add(course);
-		
+		courseDao.save(course);
 		return course;
 	}
 
@@ -51,14 +52,8 @@ public class CourseServiceImpl implements CoursesService {
 	@Override
 	public Course updateCourse(Course oneCourse) {
 		
+		courseDao.save(oneCourse);
 		
-		for(Course course :list) {
-		if(course.getId()== oneCourse.getId()) {
-			course.setTitle(oneCourse.getTitle());
-			course.setDescription(oneCourse.getDescription());
-			break;
-		}
-		}
 		return oneCourse;
 	}
 
@@ -66,14 +61,7 @@ public class CourseServiceImpl implements CoursesService {
 	@Override
 	public String deleteCourse(long courseId) {
 		
-		
-		
-		for (Course course:list) {
-			if(course.getId()==courseId) {
-				list.remove(course);
-				break;
-			}
-		}
+		courseDao.deleteById(courseId);
 		return "Deleted Succesfully";
 	}
 

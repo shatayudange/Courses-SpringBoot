@@ -1,8 +1,16 @@
 package com.example.demo.entities;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+import org.springframework.context.annotation.Primary;
+
+@Entity
 public class Course {
 	
+	@Id
 	private long id;
+	
 	private String title;
 	private String description;
 	public Course(long id, String title, String description) {
